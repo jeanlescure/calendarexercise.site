@@ -11,6 +11,7 @@
 .calendar-inputs {
   border: 1px #dddddd solid;
   max-width: 320px;
+  margin: 20px;
 }
 
 .calendar-input-header-row {
@@ -24,6 +25,21 @@
   max-width: 320px;
   padding-bottom: 20px;
   border-bottom: 1px #dddddd solid;
+}
+
+.calendar-legend-row {
+  padding: 20px;
+}
+
+.calendar-legend-row strong {
+  font-size: 16px;
+}
+
+.calendar-legend-row .col-xs.day {
+  flex-basis: 28.5714285714%;
+  max-width: 28.5714285714%;
+  width: 28.5714285714%;
+  margin-bottom: 10px;
 }
 
 .day-divider {
