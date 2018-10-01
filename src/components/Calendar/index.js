@@ -6,6 +6,8 @@ class Calendar extends React.Component {
     startMonth: 1,
     startYear: parseInt(dateFns.format(CALENDAR_INIT_DATE, 'YYYY')),
     totalDays: 365,
+    countryDropDownOpen: false,
+    countryDropDownSelection: 'CR',
   };
 
   numberInputChangeHandler = ({name, value}) => {
@@ -107,18 +109,69 @@ class Calendar extends React.Component {
     }
   };
 
+  countryDropDownClickHandler = () => {
+    this.setState({
+      countryDropDownOpen: !this.state.countryDropDownOpen,
+    });
+  };
+
+  countryDropDownChangeHandler = (e) => {
+    const newVal = e.target.value.toUpperCase();
+
+    if (!(/(^[A-Z]{0,2}$)/).test(newVal)) {
+      return;
+    }
+
+    if (newVal.length === 2) {
+      if (COUNTRY_COLLECTION.includes(newVal)) {
+        this.setState({
+          countryDropDownSelection: newVal,
+          loading: true,
+          error: false,
+        });
+        return newVal;
+      } else {
+        this.setState({
+          countryDropDownSelection: newVal,
+        });
+
+        alert(`Invalid country code entered: ${newVal}`);
+      }
+    } else if(newVal.length < 2) {
+      this.setState({
+        countryDropDownSelection: newVal,
+      });
+      return newVal;
+    }
+  };
+
+  countryDropDownSelectHandler = (value) => {
+    if (!this.state.loading) {
+      this.setState({
+        countryDropDownSelection: value,
+        loading: true,
+        error: false,
+      });
+    }
+  };
+
   render() {
     const {
       startDay,
       startMonth,
       startYear,
       totalDays,
+      countryDropDownOpen,
+      countryDropDownSelection,
     } = this.state;
 
     const {
       numberInputClickUpHandler,
       numberInputClickDownHandler,
       numberInputChangeHandler,
+      countryDropDownClickHandler,
+      countryDropDownChangeHandler,
+      countryDropDownSelectHandler,
     } = this;
 
     return (
@@ -185,6 +238,22 @@ class Calendar extends React.Component {
                   onClickDownHandler={numberInputClickDownHandler}
                   onChangeHandler={numberInputChangeHandler}
                 ></NumberInput>
+              </div>
+            </div>
+          </div>
+          <div className="row center-xs calendar-input-header-row">
+            <h4>Country</h4>
+          </div>
+          <div className="row center-xs calendar-input-row">
+            <div className="col-xs-3">
+              <div className="box">
+                <DropDown
+                  open={countryDropDownOpen}
+                  selection={countryDropDownSelection}
+                  onClickHandler={countryDropDownClickHandler}
+                  onChangeHandler={countryDropDownChangeHandler}
+                  onSelectHandler={countryDropDownSelectHandler}
+                ></DropDown>
               </div>
             </div>
           </div>

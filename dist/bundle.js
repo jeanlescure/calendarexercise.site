@@ -227,6 +227,60 @@ c=this._internalRoot,d=c.firstBatch;if(null===d)c.firstBatch=a,a._next=null;else
 hydrate:function(a,b,c){return sc(null,a,b,!0,c)},render:function(a,b,c){return sc(null,a,b,!1,c)},unstable_renderSubtreeIntoContainer:function(a,b,c,d){null==a||void 0===a._reactInternalFiber?m("38"):void 0;return sc(a,b,c,!1,d)},unmountComponentAtNode:function(a){rc(a)?void 0:m("40");return a._reactRootContainer?(Qf(function(){sc(null,null,a,!1,function(){a._reactRootContainer=null})}),!0):!1},unstable_createPortal:function(){return Tf.apply(void 0,arguments)},unstable_batchedUpdates:Pf,unstable_interactiveUpdates:Rf,
 flushSync:function(a,b){O?m("187"):void 0;var c=x;x=!0;try{return Of(a,b)}finally{x=c,aa(1,null)}},unstable_flushControlled:function(a){var b=x;x=!0;try{Of(a)}finally{(x=b)||O||aa(1,null)}},__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED:{Events:[Pd,na,zc,Fd.injectEventPluginsByName,vc,ya,function(a){Ab(a,qg)},ae,be,Lb,yc]},unstable_createRoot:function(a,b){rc(a)?void 0:m("278");return new Ta(a,!0,null!=b&&!0===b.hydrate)}};(function(a){var b=a.findFiberByHostInstance;return Rg(H({},a,{findHostInstanceByFiber:function(a){a=
 De(a);return null===a?null:a.stateNode},findFiberByHostInstance:function(a){return b?b(a):null}}))})({findFiberByHostInstance:Bb,bundleType:0,version:"16.5.2",rendererPackageName:"react-dom"});var hg={default:gg},ig=hg&&gg||hg;return ig.default||ig});
+
+
+/*!
+  Copyright (c) 2017 Jed Watson.
+  Licensed under the MIT License (MIT), see
+  http://jedwatson.github.io/classnames
+*/
+/* global define */
+
+(function () {
+	'use strict';
+
+	var hasOwn = {}.hasOwnProperty;
+
+	function classNames () {
+		var classes = [];
+
+		for (var i = 0; i < arguments.length; i++) {
+			var arg = arguments[i];
+			if (!arg) continue;
+
+			var argType = typeof arg;
+
+			if (argType === 'string' || argType === 'number') {
+				classes.push(arg);
+			} else if (Array.isArray(arg) && arg.length) {
+				var inner = classNames.apply(null, arg);
+				if (inner) {
+					classes.push(inner);
+				}
+			} else if (argType === 'object') {
+				for (var key in arg) {
+					if (hasOwn.call(arg, key) && arg[key]) {
+						classes.push(key);
+					}
+				}
+			}
+		}
+
+		return classes.join(' ');
+	}
+
+	if (typeof module !== 'undefined' && module.exports) {
+		classNames.default = classNames;
+		module.exports = classNames;
+	} else if (typeof define === 'function' && typeof define.amd === 'object' && define.amd) {
+		// register as 'classnames', consistent with npm package name
+		define('classnames', [], function () {
+			return classNames;
+		});
+	} else {
+		window.classNames = classNames;
+	}
+}());
  "use strict";
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -273,7 +327,9 @@ function (_React$Component) {
         startDay: 1,
         startMonth: 1,
         startYear: parseInt(dateFns.format(CALENDAR_INIT_DATE, 'YYYY')),
-        totalDays: 365
+        totalDays: 365,
+        countryDropDownOpen: false,
+        countryDropDownSelection: 'CR'
       }
     }), Object.defineProperty(_assertThisInitialized(_this), "numberInputChangeHandler", {
       configurable: true,
@@ -387,6 +443,63 @@ function (_React$Component) {
             break;
         }
       }
+    }), Object.defineProperty(_assertThisInitialized(_this), "countryDropDownClickHandler", {
+      configurable: true,
+      enumerable: true,
+      writable: true,
+      value: function value() {
+        _this.setState({
+          countryDropDownOpen: !_this.state.countryDropDownOpen
+        });
+      }
+    }), Object.defineProperty(_assertThisInitialized(_this), "countryDropDownChangeHandler", {
+      configurable: true,
+      enumerable: true,
+      writable: true,
+      value: function value(e) {
+        var newVal = e.target.value.toUpperCase();
+
+        if (!/(^[A-Z]{0,2}$)/.test(newVal)) {
+          return;
+        }
+
+        if (newVal.length === 2) {
+          if (COUNTRY_COLLECTION.includes(newVal)) {
+            _this.setState({
+              countryDropDownSelection: newVal,
+              loading: true,
+              error: false
+            });
+
+            return newVal;
+          } else {
+            _this.setState({
+              countryDropDownSelection: newVal
+            });
+
+            alert("Invalid country code entered: ".concat(newVal));
+          }
+        } else if (newVal.length < 2) {
+          _this.setState({
+            countryDropDownSelection: newVal
+          });
+
+          return newVal;
+        }
+      }
+    }), Object.defineProperty(_assertThisInitialized(_this), "countryDropDownSelectHandler", {
+      configurable: true,
+      enumerable: true,
+      writable: true,
+      value: function value(_value4) {
+        if (!_this.state.loading) {
+          _this.setState({
+            countryDropDownSelection: _value4,
+            loading: true,
+            error: false
+          });
+        }
+      }
     }), _temp));
   }
 
@@ -397,10 +510,15 @@ function (_React$Component) {
           startDay = _this$state3.startDay,
           startMonth = _this$state3.startMonth,
           startYear = _this$state3.startYear,
-          totalDays = _this$state3.totalDays;
+          totalDays = _this$state3.totalDays,
+          countryDropDownOpen = _this$state3.countryDropDownOpen,
+          countryDropDownSelection = _this$state3.countryDropDownSelection;
       var numberInputClickUpHandler = this.numberInputClickUpHandler,
           numberInputClickDownHandler = this.numberInputClickDownHandler,
-          numberInputChangeHandler = this.numberInputChangeHandler;
+          numberInputChangeHandler = this.numberInputChangeHandler,
+          countryDropDownClickHandler = this.countryDropDownClickHandler,
+          countryDropDownChangeHandler = this.countryDropDownChangeHandler,
+          countryDropDownSelectHandler = this.countryDropDownSelectHandler;
       return React.createElement("div", {
         className: "calendar"
       }, React.createElement("div", {
@@ -461,12 +579,119 @@ function (_React$Component) {
         onClickUpHandler: numberInputClickUpHandler,
         onClickDownHandler: numberInputClickDownHandler,
         onChangeHandler: numberInputChangeHandler
+      })))), React.createElement("div", {
+        className: "row center-xs calendar-input-header-row"
+      }, React.createElement("h4", null, "Country")), React.createElement("div", {
+        className: "row center-xs calendar-input-row"
+      }, React.createElement("div", {
+        className: "col-xs-3"
+      }, React.createElement("div", {
+        className: "box"
+      }, React.createElement(DropDown, {
+        open: countryDropDownOpen,
+        selection: countryDropDownSelection,
+        onClickHandler: countryDropDownClickHandler,
+        onChangeHandler: countryDropDownChangeHandler,
+        onSelectHandler: countryDropDownSelectHandler
       }))))));
     }
   }]);
 
   return Calendar;
 }(React.Component);
+
+"use strict";
+
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+var COUNTRY_COLLECTION = ['US', 'CR', 'AD', 'AR', 'AT', 'AU', 'AX', 'BB', 'BE', 'BG', 'BO', 'BR', 'BS', 'BW', 'BY', 'BZ', 'CA', 'CH', 'CL', 'CN', 'CO', 'CU', 'CY', 'CZ', 'DE', 'DK', 'DO', 'EC', 'EE', 'EG', 'ES', 'FI', 'FO', 'FR', 'GA', 'GB', 'GD', 'GL', 'GR', 'GT', 'GY', 'HN', 'HR', 'HT', 'HU', 'IE', 'IM', 'IS', 'IT', 'JE', 'JM', 'LI', 'LS', 'LT', 'LU', 'LV', 'MA', 'MC', 'MD', 'MG', 'MK', 'MT', 'MX', 'MZ', 'NA', 'NI', 'NL', 'NO', 'NZ', 'PA', 'PE', 'PL', 'PR', 'PT', 'PY', 'RO', 'RS', 'RU', 'SE', 'SI', 'SJ', 'SK', 'SM', 'SR', 'SV', 'TN', 'TR', 'UA', 'VA', 'VE', 'UY', 'ZA'];
+
+var DropDownItem = function DropDownItem(_ref) {
+  var children = _ref.children,
+      onClickHandler = _ref.onClickHandler,
+      onChangeHandler = _ref.onChangeHandler,
+      onSelectHandler = _ref.onSelectHandler,
+      selected = _ref.selected,
+      value = _ref.value;
+  return React.createElement("a", {
+    href: "#",
+    onClick: function onClick(e) {
+      e.preventDefault();
+      onSelectHandler(value);
+      onClickHandler();
+    },
+    className: classNames({
+      selected: selected
+    })
+  }, children);
+};
+
+var DropDown =
+/*#__PURE__*/
+function (_React$PureComponent) {
+  _inherits(DropDown, _React$PureComponent);
+
+  function DropDown() {
+    _classCallCheck(this, DropDown);
+
+    return _possibleConstructorReturn(this, (DropDown.__proto__ || Object.getPrototypeOf(DropDown)).apply(this, arguments));
+  }
+
+  _createClass(DropDown, [{
+    key: "render",
+    value: function render() {
+      var _this$props = this.props,
+          open = _this$props.open,
+          selection = _this$props.selection,
+          onClickHandler = _this$props.onClickHandler,
+          onChangeHandler = _this$props.onChangeHandler,
+          onSelectHandler = _this$props.onSelectHandler;
+      return React.createElement("div", {
+        className: "row drop-down"
+      }, React.createElement("div", {
+        className: "col-xs-8"
+      }, React.createElement("input", {
+        onChange: onChangeHandler,
+        className: "box",
+        value: selection
+      })), React.createElement("div", {
+        className: "col-xs-4"
+      }, React.createElement("button", {
+        onClick: onClickHandler,
+        className: "box"
+      }, open ? '▲' : '▼')), React.createElement("div", {
+        className: classNames('drop-down-item-list', {
+          open: open
+        })
+      }, COUNTRY_COLLECTION.map(function (value, i) {
+        return React.createElement(DropDownItem, {
+          key: i,
+          onClickHandler: onClickHandler,
+          onChangeHandler: onChangeHandler,
+          onSelectHandler: onSelectHandler,
+          value: value,
+          selected: value === selection ? true : false
+        }, value);
+      })));
+    }
+  }]);
+
+  return DropDown;
+}(React.PureComponent);
 
 "use strict";
 
