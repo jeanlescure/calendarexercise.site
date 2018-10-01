@@ -32,6 +32,22 @@
 }
 
 
+.day {
+  border: 1px #ffffff solid;
+  padding: 8px;
+}
+
+.col-xs.day {
+  flex-basis: 14.2857142857%;
+  max-width: 14.2857142857%;
+  width: 14.2857142857%;
+}
+
+.header {
+  border: none;
+}
+
+
 .drop-down {
   position: relative;
 }
@@ -93,6 +109,18 @@
   padding: 20px;
   border-top: 1px #dddddd solid;
 }
+
+.month {
+  min-width: 300px;
+  max-width: 320px;
+  margin: 0px 30px 30px 30px;
+}
+
+.month-header {
+  background-image: linear-gradient(0deg,#e8efd1,#f8f9f2);
+  background-size: 100% 100%;
+}
+
 
 .number-input input {
   padding: 3px 6px;

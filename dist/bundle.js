@@ -506,6 +506,15 @@ function (_React$Component) {
   _createClass(Calendar, [{
     key: "render",
     value: function render() {
+      var _dateFns3 = dateFns,
+          parse = _dateFns3.parse,
+          format = _dateFns3.format,
+          differenceInCalendarMonths = _dateFns3.differenceInCalendarMonths,
+          addDays = _dateFns3.addDays,
+          lastDayOfMonth = _dateFns3.lastDayOfMonth,
+          differenceInDays = _dateFns3.differenceInDays,
+          setDate = _dateFns3.setDate,
+          addMonths = _dateFns3.addMonths;
       var _this$state3 = this.state,
           startDay = _this$state3.startDay,
           startMonth = _this$state3.startMonth,
@@ -519,6 +528,9 @@ function (_React$Component) {
           countryDropDownClickHandler = this.countryDropDownClickHandler,
           countryDropDownChangeHandler = this.countryDropDownChangeHandler,
           countryDropDownSelectHandler = this.countryDropDownSelectHandler;
+      var totalDaysLeft = totalDays;
+      var startDate = parse("".concat(startMonth, "/").concat(startDay, "/").concat(startYear));
+      var totalMonths = differenceInCalendarMonths(addDays(startDate, totalDays - 1), startDate) + 1;
       return React.createElement("div", {
         className: "calendar"
       }, React.createElement("div", {
@@ -593,12 +605,87 @@ function (_React$Component) {
         onClickHandler: countryDropDownClickHandler,
         onChangeHandler: countryDropDownChangeHandler,
         onSelectHandler: countryDropDownSelectHandler
+      }))))), React.createElement("div", {
+        className: "row"
+      }, React.createElement("div", {
+        className: "col-xs-12"
+      }, React.createElement("div", {
+        className: "box"
+      }, React.createElement("div", {
+        className: "row"
+      }, Array.from(Array(totalMonths).keys()).map(function (m) {
+        var calendarStartDate = m > 0 ? addMonths(setDate(startDate, 1), m) : startDate;
+        var lastDayOfMonthDay = parseInt(format(lastDayOfMonth(calendarStartDate), 'D'));
+        var month = React.createElement(Month, {
+          startDate: calendarStartDate,
+          numberOfDays: totalDaysLeft,
+          key: m
+        });
+        totalDaysLeft -= differenceInDays(setDate(calendarStartDate, lastDayOfMonthDay), calendarStartDate) + 1;
+        return month;
       }))))));
     }
   }]);
 
   return Calendar;
 }(React.Component);
+
+"use strict";
+
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+var WEEK_DAY_LABELS = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
+var DAY_TYPES = {
+  HEADER: 'header',
+  WEEKEND: 'weekend',
+  WEEKDAY: 'weekday',
+  TODAY: 'today',
+  HOLIDAY: 'holiday',
+  INVALID: 'invalid'
+};
+
+var Day =
+/*#__PURE__*/
+function (_React$PureComponent) {
+  _inherits(Day, _React$PureComponent);
+
+  function Day() {
+    _classCallCheck(this, Day);
+
+    return _possibleConstructorReturn(this, (Day.__proto__ || Object.getPrototypeOf(Day)).apply(this, arguments));
+  }
+
+  _createClass(Day, [{
+    key: "render",
+    value: function render() {
+      var _this$props = this.props,
+          dayType = _this$props.dayType,
+          value = _this$props.value;
+      var labelValue = dayType === DAY_TYPES.HEADER ? WEEK_DAY_LABELS[value] : value;
+      return React.createElement("div", {
+        className: classNames('col-xs day', 'left-xs')
+      }, React.createElement("div", {
+        className: "box center-xs"
+      }, labelValue));
+    }
+  }]);
+
+  return Day;
+}(React.PureComponent);
 
 "use strict";
 
@@ -706,6 +793,113 @@ var Footer = function Footer() {
     href: "https://github.com/jeanlescure/calendarexercise.site"
   }, "Github"));
 };
+
+"use strict";
+
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+var Month =
+/*#__PURE__*/
+function (_React$PureComponent) {
+  _inherits(Month, _React$PureComponent);
+
+  function Month() {
+    _classCallCheck(this, Month);
+
+    return _possibleConstructorReturn(this, (Month.__proto__ || Object.getPrototypeOf(Month)).apply(this, arguments));
+  }
+
+  _createClass(Month, [{
+    key: "render",
+    value: function render() {
+      var _dateFns = dateFns,
+          parse = _dateFns.parse,
+          format = _dateFns.format,
+          addDays = _dateFns.addDays,
+          isSameMonth = _dateFns.isSameMonth,
+          lastDayOfMonth = _dateFns.lastDayOfMonth;
+      var _this$props = this.props,
+          startDate = _this$props.startDate,
+          numberOfDays = _this$props.numberOfDays;
+      var day = parseInt(format(startDate, 'D'));
+      var month = parseInt(format(startDate, 'M'));
+      var year = format(startDate, 'YYYY');
+      var dayIndex = parseInt(format(startDate, 'd'));
+      var lastDayOfMonthDay = isSameMonth(startDate, addDays(startDate, numberOfDays - 1)) ? addDays(startDate, numberOfDays - 1) : lastDayOfMonth(startDate, numberOfDays - 1);
+      var lastDayOfMonthIndex = format(lastDayOfMonthDay, 'd');
+      var valueLabelCollection = Array.from(Array(parseInt(format(lastDayOfMonthDay, 'D')) - day + 1).keys()).map(function (d) {
+        return d + day;
+      });
+
+      if (dayIndex > 0) {
+        valueLabelCollection = [].concat(Array.from(Array(dayIndex).keys()).map(function (d) {
+          return null;
+        }), valueLabelCollection);
+      }
+
+      if (lastDayOfMonthIndex < 6) {
+        valueLabelCollection = [].concat(valueLabelCollection, Array.from(Array(6 - lastDayOfMonthIndex).keys()).map(function (d) {
+          return null;
+        }));
+      }
+
+      return React.createElement("div", {
+        className: "col-xs month"
+      }, React.createElement("div", {
+        className: "box"
+      }, React.createElement("div", {
+        className: "row"
+      }, React.createElement("div", {
+        className: "col-xs-12"
+      }, React.createElement("div", {
+        className: "box"
+      }, React.createElement("div", {
+        className: "row"
+      }, Array.from(Array(7).keys()).map(function (d) {
+        return React.createElement(Day, {
+          value: d,
+          dayType: DAY_TYPES.HEADER,
+          key: d
+        });
+      }))))), React.createElement("div", {
+        className: "row"
+      }, React.createElement("div", {
+        className: "col-xs-12"
+      }, React.createElement("div", {
+        className: "box center-xs month-header"
+      }, format(startDate, 'MMMM'), " ", format(startDate, 'YYYY')))), React.createElement("div", {
+        className: "row"
+      }, React.createElement("div", {
+        className: "col-xs"
+      }, React.createElement("div", {
+        className: "box"
+      }, React.createElement("div", {
+        className: "row"
+      }, valueLabelCollection.map(function (valueLabel, i) {
+        return React.createElement(Day, {
+          value: valueLabel,
+          key: i
+        });
+      })))))));
+    }
+  }]);
+
+  return Month;
+}(React.PureComponent);
 
 "use strict";
 

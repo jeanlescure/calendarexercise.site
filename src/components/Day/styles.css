@@ -1,0 +1,14 @@
+.day {
+  border: 1px #ffffff solid;
+  padding: 8px;
+}
+
+.col-xs.day {
+  flex-basis: 14.2857142857%;
+  max-width: 14.2857142857%;
+  width: 14.2857142857%;
+}
+
+.header {
+  border: none;
+}

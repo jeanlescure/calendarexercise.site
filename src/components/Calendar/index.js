@@ -157,6 +157,17 @@ class Calendar extends React.Component {
 
   render() {
     const {
+      parse,
+      format,
+      differenceInCalendarMonths,
+      addDays,
+      lastDayOfMonth,
+      differenceInDays,
+      setDate,
+      addMonths,
+    } = dateFns;
+
+    const {
       startDay,
       startMonth,
       startYear,
@@ -173,6 +184,11 @@ class Calendar extends React.Component {
       countryDropDownChangeHandler,
       countryDropDownSelectHandler,
     } = this;
+
+    let totalDaysLeft = totalDays;
+
+    const startDate = parse(`${startMonth}/${startDay}/${startYear}`);
+    const totalMonths = differenceInCalendarMonths(addDays(startDate, totalDays - 1), startDate) + 1;
 
     return (
       <div className="calendar">
@@ -254,6 +270,33 @@ class Calendar extends React.Component {
                   onChangeHandler={countryDropDownChangeHandler}
                   onSelectHandler={countryDropDownSelectHandler}
                 ></DropDown>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="row">
+          <div className="col-xs-12">
+            <div className="box">
+              <div className="row">
+                {
+                  Array.from(Array(totalMonths).keys()).map(
+                    (m) => {
+                      const calendarStartDate = (m > 0)? addMonths(setDate(startDate, 1), m) : startDate;
+                      const lastDayOfMonthDay = parseInt(format(lastDayOfMonth(calendarStartDate),'D'));
+                      const month = (
+                        <Month
+                          startDate={calendarStartDate}
+                          numberOfDays={totalDaysLeft}
+                          key={m}
+                        >
+                        </Month>
+                      );
+
+                      totalDaysLeft -= differenceInDays(setDate(calendarStartDate, lastDayOfMonthDay), calendarStartDate) + 1;
+                      return month;
+                    }
+                  )
+                }
               </div>
             </div>
           </div>
