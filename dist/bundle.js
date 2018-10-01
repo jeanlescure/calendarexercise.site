@@ -514,7 +514,9 @@ function (_React$Component) {
           lastDayOfMonth = _dateFns3.lastDayOfMonth,
           differenceInDays = _dateFns3.differenceInDays,
           setDate = _dateFns3.setDate,
-          addMonths = _dateFns3.addMonths;
+          addMonths = _dateFns3.addMonths,
+          startOfWeek = _dateFns3.startOfWeek,
+          lastDayOfWeek = _dateFns3.lastDayOfWeek;
       var _this$state3 = this.state,
           startDay = _this$state3.startDay,
           startMonth = _this$state3.startMonth,
@@ -605,7 +607,29 @@ function (_React$Component) {
         onClickHandler: countryDropDownClickHandler,
         onChangeHandler: countryDropDownChangeHandler,
         onSelectHandler: countryDropDownSelectHandler
-      }))))), React.createElement("div", {
+      })))), React.createElement("div", {
+        className: "row left-xs calendar-legend-row"
+      }, React.createElement("div", {
+        className: "col-xs-6"
+      }, React.createElement("strong", null, "Today:"), React.createElement(Day, {
+        value: parseInt(format(CALENDAR_INIT_DATE, 'D')),
+        dayType: DAY_TYPES.TODAY
+      })), React.createElement("div", {
+        className: "col-xs-6"
+      }, React.createElement("strong", null, "Week Day:"), React.createElement(Day, {
+        value: parseInt(format(addDays(startOfWeek(CALENDAR_INIT_DATE), 1), 'D')),
+        dayType: DAY_TYPES.WEEKDAY
+      })), React.createElement("div", {
+        className: "col-xs-6"
+      }, React.createElement("strong", null, "Weekend Day:"), React.createElement(Day, {
+        value: parseInt(format(lastDayOfWeek(CALENDAR_INIT_DATE), 'D')),
+        dayType: DAY_TYPES.WEEKEND
+      })), React.createElement("div", {
+        className: "col-xs-6"
+      }, React.createElement("strong", null, "Holiday:"), React.createElement(Day, {
+        value: 1,
+        dayType: DAY_TYPES.HOLIDAY
+      })))), React.createElement("div", {
         className: "row"
       }, React.createElement("div", {
         className: "col-xs-12"
@@ -677,7 +701,7 @@ function (_React$PureComponent) {
           value = _this$props.value;
       var labelValue = dayType === DAY_TYPES.HEADER ? WEEK_DAY_LABELS[value] : value;
       return React.createElement("div", {
-        className: classNames('col-xs day', 'left-xs')
+        className: classNames('col-xs day', 'left-xs', dayType)
       }, React.createElement("div", {
         className: "box center-xs"
       }, labelValue));

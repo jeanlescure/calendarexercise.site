@@ -165,6 +165,8 @@ class Calendar extends React.Component {
       differenceInDays,
       setDate,
       addMonths,
+      startOfWeek,
+      lastDayOfWeek,
     } = dateFns;
 
     const {
@@ -271,6 +273,36 @@ class Calendar extends React.Component {
                   onSelectHandler={countryDropDownSelectHandler}
                 ></DropDown>
               </div>
+            </div>
+          </div>
+          <div className="row left-xs calendar-legend-row">
+            <div className="col-xs-6">
+              <strong>Today:</strong>
+              <Day
+                value={parseInt(format(CALENDAR_INIT_DATE, 'D'))}
+                dayType={DAY_TYPES.TODAY}
+              ></Day>
+            </div>
+            <div className="col-xs-6">
+              <strong>Week Day:</strong>
+              <Day
+                value={parseInt(format(addDays(startOfWeek(CALENDAR_INIT_DATE), 1), 'D'))}
+                dayType={DAY_TYPES.WEEKDAY}
+              ></Day>
+            </div>
+            <div className="col-xs-6">
+              <strong>Weekend Day:</strong>
+              <Day
+                value={parseInt(format(lastDayOfWeek(CALENDAR_INIT_DATE), 'D'))}
+                dayType={DAY_TYPES.WEEKEND}
+              ></Day>
+            </div>
+            <div className="col-xs-6">
+              <strong>Holiday:</strong>
+              <Day
+                value={1}
+                dayType={DAY_TYPES.HOLIDAY}
+              ></Day>
             </div>
           </div>
         </div>

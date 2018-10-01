@@ -18,7 +18,7 @@ class Day extends React.PureComponent {
     const labelValue = (dayType === DAY_TYPES.HEADER)? WEEK_DAY_LABELS[value] : value;
 
     return (
-      <div className={classNames('col-xs day', 'left-xs')}>
+      <div className={classNames('col-xs day', 'left-xs', dayType)}>
         <div className="box center-xs">
           {labelValue}
         </div>

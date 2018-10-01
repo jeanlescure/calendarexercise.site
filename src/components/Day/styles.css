@@ -12,3 +12,46 @@
 .header {
   border: none;
 }
+
+.weekend {
+  background: #fdfc55;
+}
+
+.weekday {
+  background: #c9d8a7;
+  color: #162f63;
+}
+
+.today {
+  background: #ff5a00;
+  color: #162f63;
+}
+
+.holiday {
+  background-image: linear-gradient(0deg,#cc6aa5,#3e91cc,#2dcca7,#3e91cc,#cc6aa5,#3e91cc);
+  background-size: 100% 600%;
+	-webkit-animation: bg-pan-bottom 8s linear infinite both;
+  animation: bg-pan-bottom 8s linear infinite both;
+  color: #ffffff;
+}
+
+.invalid {
+  background: #ccccce;
+}
+
+@-webkit-keyframes bg-pan-bottom {
+  0% {
+    background-position: 50% 0%;
+  }
+  100% {
+    background-position: 50% 100%;
+  }
+}
+@keyframes bg-pan-bottom {
+  0% {
+    background-position: 50% 0%;
+  }
+  100% {
+    background-position: 50% 100%;
+  }
+}
