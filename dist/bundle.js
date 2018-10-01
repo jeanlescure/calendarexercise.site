@@ -329,7 +329,8 @@ function (_React$Component) {
         startYear: parseInt(dateFns.format(CALENDAR_INIT_DATE, 'YYYY')),
         totalDays: 365,
         countryDropDownOpen: false,
-        countryDropDownSelection: 'CR'
+        countryDropDownSelection: 'CR',
+        holidays: []
       }
     }), Object.defineProperty(_assertThisInitialized(_this), "numberInputChangeHandler", {
       configurable: true,
@@ -523,7 +524,8 @@ function (_React$Component) {
           startYear = _this$state3.startYear,
           totalDays = _this$state3.totalDays,
           countryDropDownOpen = _this$state3.countryDropDownOpen,
-          countryDropDownSelection = _this$state3.countryDropDownSelection;
+          countryDropDownSelection = _this$state3.countryDropDownSelection,
+          holidays = _this$state3.holidays;
       var numberInputClickUpHandler = this.numberInputClickUpHandler,
           numberInputClickDownHandler = this.numberInputClickDownHandler,
           numberInputChangeHandler = this.numberInputChangeHandler,
@@ -643,7 +645,8 @@ function (_React$Component) {
         var month = React.createElement(Month, {
           startDate: calendarStartDate,
           numberOfDays: totalDaysLeft,
-          key: m
+          key: m,
+          holidays: holidays
         });
         totalDaysLeft -= differenceInDays(setDate(calendarStartDate, lastDayOfMonthDay), calendarStartDate) + 1;
         return month;
@@ -848,14 +851,44 @@ function (_React$PureComponent) {
   }
 
   _createClass(Month, [{
+    key: "getDayType",
+    value: function getDayType(day, month, year) {
+      var _dateFns = dateFns,
+          isWeekend = _dateFns.isWeekend,
+          isSameDay = _dateFns.isSameDay;
+      var holidays = this.props.holidays;
+
+      if (day === null) {
+        return DAY_TYPES.INVALID;
+      }
+
+      if (isSameDay("".concat(month, "/").concat(day, "/").concat(year), CALENDAR_INIT_DATE)) {
+        return DAY_TYPES.TODAY;
+      }
+
+      if (isWeekend("".concat(month, "/").concat(day, "/").concat(year))) {
+        return DAY_TYPES.WEEKEND;
+      }
+
+      if (holidays.length > 0 && holidays.reduce(function (a, b) {
+        return isSameDay("".concat(month, "/").concat(day, "/").concat(year), b.date) || a;
+      }, false)) {
+        return DAY_TYPES.HOLIDAY;
+      }
+
+      return DAY_TYPES.WEEKDAY;
+    }
+  }, {
     key: "render",
     value: function render() {
-      var _dateFns = dateFns,
-          parse = _dateFns.parse,
-          format = _dateFns.format,
-          addDays = _dateFns.addDays,
-          isSameMonth = _dateFns.isSameMonth,
-          lastDayOfMonth = _dateFns.lastDayOfMonth;
+      var _this = this;
+
+      var _dateFns2 = dateFns,
+          parse = _dateFns2.parse,
+          format = _dateFns2.format,
+          addDays = _dateFns2.addDays,
+          isSameMonth = _dateFns2.isSameMonth,
+          lastDayOfMonth = _dateFns2.lastDayOfMonth;
       var _this$props = this.props,
           startDate = _this$props.startDate,
           numberOfDays = _this$props.numberOfDays;
@@ -916,6 +949,7 @@ function (_React$PureComponent) {
       }, valueLabelCollection.map(function (valueLabel, i) {
         return React.createElement(Day, {
           value: valueLabel,
+          dayType: _this.getDayType(valueLabel, month, year),
           key: i
         });
       })))))));

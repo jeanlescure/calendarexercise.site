@@ -1,4 +1,33 @@
 class Month extends React.PureComponent {
+  getDayType(day, month, year) {
+    const {
+      isWeekend,
+      isSameDay,
+    } = dateFns;
+
+    const {
+      holidays,
+    } = this.props;
+
+    if (day === null) {
+      return DAY_TYPES.INVALID;
+    }
+
+    if (isSameDay(`${month}/${day}/${year}`, CALENDAR_INIT_DATE)) {
+      return DAY_TYPES.TODAY;
+    }
+
+    if (isWeekend(`${month}/${day}/${year}`)) {
+      return DAY_TYPES.WEEKEND;
+    }
+
+    if (holidays.length > 0 && holidays.reduce((a, b) => (isSameDay(`${month}/${day}/${year}`, b.date) || a), false)) {
+      return DAY_TYPES.HOLIDAY;
+    }
+    
+    return DAY_TYPES.WEEKDAY;
+  }
+
   render() {
     const {
       parse,
@@ -83,6 +112,7 @@ class Month extends React.PureComponent {
                     valueLabelCollection.map((valueLabel, i) => (
                       <Day
                         value={valueLabel}
+                        dayType={this.getDayType(valueLabel, month, year)}
                         key={i}
                       ></Day>
                     ))

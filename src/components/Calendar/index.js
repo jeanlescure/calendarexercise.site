@@ -8,6 +8,7 @@ class Calendar extends React.Component {
     totalDays: 365,
     countryDropDownOpen: false,
     countryDropDownSelection: 'CR',
+    holidays: [],
   };
 
   numberInputChangeHandler = ({name, value}) => {
@@ -176,6 +177,7 @@ class Calendar extends React.Component {
       totalDays,
       countryDropDownOpen,
       countryDropDownSelection,
+      holidays,
     } = this.state;
 
     const {
@@ -320,6 +322,7 @@ class Calendar extends React.Component {
                           startDate={calendarStartDate}
                           numberOfDays={totalDaysLeft}
                           key={m}
+                          holidays={holidays}
                         >
                         </Month>
                       );
