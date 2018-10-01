@@ -7,7 +7,7 @@
   "author": "Jean M. Lescure",
   "license": "MIT",
   "scripts": {
-    "build": "echo ⚠️ Not implemented",
+    "build": "rimraf dist && mkdir dist && node scripts/packager.js -p",
     "dev": "node scripts/server.dev.js"
   },
   "devDependencies": {
@@ -20,6 +20,10 @@
     "cheerio": "^1.0.0-rc.2",
     "chokidar": "^1.7.0",
     "express": "^4.16.2",
+    "glob": "7.1.2",
+    "react": "16.4.0",
+    "react-dom": "16.4.0",
+    "rimraf": "2.6.2",
     "ws": "^3.2.0"
   }
 }

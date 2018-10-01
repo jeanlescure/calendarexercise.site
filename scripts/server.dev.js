@@ -7,6 +7,8 @@ const chokidar = require('chokidar');
 const WebSocket = require('ws');
 
 const config = require('./config');
+const packager = require('./packager');
+
 
 const app = express();
 
@@ -17,6 +19,20 @@ app.get('/', function(req, res, next){
   indexTree('head').append(`<script>var ws = new WebSocket("ws://localhost:${config.port}/");ws.onmessage = (e) => {if (e.data === 'reload') window.location.reload();};</script>`);
 
   res.send(indexTree.html());
+});
+
+app.get('/dist/bundle.js', function(req, res, next){
+  const bundle = fs.readFileSync(config.jsBundleFile);
+
+  res.type('text/javascript');
+  res.send(bundle);
+});
+
+app.get('/dist/bundle.css', function(req, res, next){
+  const bundle = fs.readFileSync(config.cssBundleFile);
+
+  res.type('text/css');
+  res.send(bundle);
 });
 
 app.use('/assets', express.static(config.assetsDir));
@@ -66,14 +82,17 @@ server.listen(config.port, () => {
 
   watcher.on('ready', (path) => {
     watcher.on('add', (path) => {
+      packager.logPackageAllAndCatchErrors('added', path);
       reload();
     });
 
     watcher.on('change', (path) => {
+      packager.logPackageAllAndCatchErrors('changed', path);
       reload();
     });
 
     watcher.on('unlink', (path) => {
+      packager.logPackageAllAndCatchErrors('removed', path);
       reload();
     });
   });
