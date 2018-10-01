@@ -1,0 +1,32 @@
+.calendar {
+  padding: 30px 30px 100px 30px;
+}
+
+.calendar h4 {
+  margin: 0;
+  width: 100%;
+  padding-top: 15px;
+}
+
+.calendar-inputs {
+  border: 1px #dddddd solid;
+  max-width: 320px;
+}
+
+.calendar-input-header-row {
+  min-width: 300px;
+  max-width: 320px;
+  margin-bottom: 5px;
+}
+
+.calendar-input-row {
+  min-width: 300px;
+  max-width: 320px;
+  padding-bottom: 20px;
+  border-bottom: 1px #dddddd solid;
+}
+
+.day-divider {
+  padding-top: 3px;
+  font-size: 30px;
+}

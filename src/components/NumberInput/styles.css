@@ -1,0 +1,11 @@
+.number-input input {
+  padding: 3px 6px;
+  width: calc(100% - 16px);
+  height: calc(100% - 10px);
+  font-size: 14px;
+}
+
+.number-input button {
+  border-radius: 0;
+  border: 1px #dddddd solid;
+}
