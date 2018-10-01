@@ -9,6 +9,32 @@ class Calendar extends React.Component {
     countryDropDownOpen: false,
     countryDropDownSelection: 'CR',
     holidays: [],
+    loading: false,
+    error: false,
+  };
+
+  componentDidMount() {
+    this.setState({
+      loading: true,
+      error: false,
+    }, this.loadHolidays);
+  }
+
+  loadHolidays = () => {
+    axios.get(`https://date.nager.at/api/v1/get/${this.state.countryDropDownSelection}/${this.state.startYear}`)
+      .then((response) => {
+        this.setState({
+          holidays: response.data,
+          loading: false,
+          error: false,
+        });
+      })
+      .catch((error) => {
+        this.setState({
+          error: true,
+          loading: false,
+        });
+      });
   };
 
   numberInputChangeHandler = ({name, value}) => {
@@ -129,12 +155,12 @@ class Calendar extends React.Component {
           countryDropDownSelection: newVal,
           loading: true,
           error: false,
-        });
+        }, this.loadHolidays);
         return newVal;
       } else {
         this.setState({
           countryDropDownSelection: newVal,
-        });
+        }, this.loadHolidays);
 
         alert(`Invalid country code entered: ${newVal}`);
       }
@@ -152,8 +178,19 @@ class Calendar extends React.Component {
         countryDropDownSelection: value,
         loading: true,
         error: false,
-      });
+      }, this.loadHolidays);
     }
+  };
+
+  getMonthHolidays = (calendarStartDate) => {
+    const {
+      parse,
+      getMonth,
+    } = dateFns;
+
+    return this.state.holidays.filter((h) => {
+      return (getMonth(parse(h.date)) === getMonth(calendarStartDate));
+    });
   };
 
   render() {
