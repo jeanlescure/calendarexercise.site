@@ -21,15 +21,25 @@ class Calendar extends React.Component {
   }
 
   loadHolidays = () => {
-    axios.get(`https://date.nager.at/api/v1/get/${this.state.countryDropDownSelection}/${this.state.startYear}`)
+    axios.get(`/assets/holidays.json`)
       .then((response) => {
+        const days = response.data.holidays[
+          this.state.countryDropDownSelection
+        ].days;
+
+        const data = Object.keys(days).map((k) => ({
+          date: `${k}-${this.state.startYear}`,
+          name: days[k].name,
+        }));
+
         this.setState({
-          holidays: response.data,
+          holidays: data,
           loading: false,
           error: false,
         });
       })
       .catch((error) => {
+        console.log(error);
         this.setState({
           error: true,
           loading: false,

@@ -349,13 +349,23 @@ function (_React$Component) {
       enumerable: true,
       writable: true,
       value: function value() {
-        axios.get("https://date.nager.at/api/v1/get/".concat(_this.state.countryDropDownSelection, "/").concat(_this.state.startYear)).then(function (response) {
+        axios.get("/assets/holidays.json").then(function (response) {
+          var days = response.data.holidays[_this.state.countryDropDownSelection].days;
+          var data = Object.keys(days).map(function (k) {
+            return {
+              date: "".concat(k, "-").concat(_this.state.startYear),
+              name: days[k].name
+            };
+          });
+
           _this.setState({
-            holidays: response.data,
+            holidays: data,
             loading: false,
             error: false
           });
         }).catch(function (error) {
+          console.log(error);
+
           _this.setState({
             error: true,
             loading: false
@@ -793,7 +803,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
-var COUNTRY_COLLECTION = ['US', 'CR', 'AD', 'AR', 'AT', 'AU', 'AX', 'BB', 'BE', 'BG', 'BO', 'BR', 'BS', 'BW', 'BY', 'BZ', 'CA', 'CH', 'CL', 'CN', 'CO', 'CU', 'CY', 'CZ', 'DE', 'DK', 'DO', 'EC', 'EE', 'EG', 'ES', 'FI', 'FO', 'FR', 'GA', 'GB', 'GD', 'GL', 'GR', 'GT', 'GY', 'HN', 'HR', 'HT', 'HU', 'IE', 'IM', 'IS', 'IT', 'JE', 'JM', 'LI', 'LS', 'LT', 'LU', 'LV', 'MA', 'MC', 'MD', 'MG', 'MK', 'MT', 'MX', 'MZ', 'NA', 'NI', 'NL', 'NO', 'NZ', 'PA', 'PE', 'PL', 'PR', 'PT', 'PY', 'RO', 'RS', 'RU', 'SE', 'SI', 'SJ', 'SK', 'SM', 'SR', 'SV', 'TN', 'TR', 'UA', 'VA', 'VE', 'UY', 'ZA'];
+var COUNTRY_COLLECTION = ['AD', 'AG', 'AI', 'AL', 'AM', 'AO', 'AR', 'AS', 'AT', 'AU', 'AW', 'AX', 'AZ', 'BA', 'BB', 'BE', 'BG', 'BI', 'BL', 'BO', 'BQ', 'BR', 'BS', 'BW', 'BY', 'BZ', 'CA', 'CC', 'CD', 'CF', 'CG', 'CH', 'CL', 'CM', 'CN', 'CO', 'CR', 'CU', 'CW', 'CY', 'CZ', 'DE', 'DK', 'DM', 'DO', 'EC', 'EE', 'ES', 'ET', 'FI', 'FO', 'FR', 'GA', 'GB', 'GD', 'GF', 'GG', 'GI', 'GL', 'GP', 'GQ', 'GR', 'GT', 'GU', 'GY', 'HN', 'HR', 'HT', 'HU', 'IE', 'IM', 'IS', 'IT', 'JE', 'JM', 'JP', 'KE', 'KR', 'LI', 'LS', 'LT', 'LU', 'LV', 'MC', 'MD', 'ME', 'MG', 'MK', 'MQ', 'MT', 'MW', 'MX', 'MZ', 'NA', 'NI', 'NL', 'NO', 'NZ', 'PA', 'PE', 'PL', 'PT', 'PY', 'RE', 'RO', 'RS', 'RU', 'RW', 'SE', 'SH', 'SI', 'SJ', 'SK', 'SM', 'SO', 'SS', 'SV', 'TG', 'TO', 'TR', 'TZ', 'UA', 'UG', 'US', 'UY', 'VA', 'VE', 'VN', 'XK', 'YT', 'ZA', 'ZM', 'ZW'];
 
 var DropDownItem = function DropDownItem(_ref) {
   var children = _ref.children,
