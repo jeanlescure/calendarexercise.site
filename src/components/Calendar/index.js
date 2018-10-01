@@ -215,6 +215,8 @@ class Calendar extends React.Component {
       countryDropDownOpen,
       countryDropDownSelection,
       holidays,
+      loading,
+      error,
     } = this.state;
 
     const {
@@ -350,7 +352,18 @@ class Calendar extends React.Component {
             <div className="box">
               <div className="row">
                 {
-                  Array.from(Array(totalMonths).keys()).map(
+                  
+                  loading && !error && <h2>Loading...</h2>
+                }
+                {
+                  !loading && error &&
+                  <div>
+                    <h2>Error loading holidays...</h2>
+                    <a href="#" onClick={(e) => {e.preventDefault(); this.loadHolidays();}}>Retry</a>
+                  </div>
+                }
+                {
+                  !loading && !error && Array.from(Array(totalMonths).keys()).map(
                     (m) => {
                       const calendarStartDate = (m > 0)? addMonths(setDate(startDate, 1), m) : startDate;
                       const lastDayOfMonthDay = parseInt(format(lastDayOfMonth(calendarStartDate),'D'));

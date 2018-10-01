@@ -557,6 +557,8 @@ function (_React$Component) {
   }, {
     key: "render",
     value: function render() {
+      var _this2 = this;
+
       var _dateFns4 = dateFns,
           parse = _dateFns4.parse,
           format = _dateFns4.format,
@@ -575,7 +577,9 @@ function (_React$Component) {
           totalDays = _this$state3.totalDays,
           countryDropDownOpen = _this$state3.countryDropDownOpen,
           countryDropDownSelection = _this$state3.countryDropDownSelection,
-          holidays = _this$state3.holidays;
+          holidays = _this$state3.holidays,
+          loading = _this$state3.loading,
+          error = _this$state3.error;
       var numberInputClickUpHandler = this.numberInputClickUpHandler,
           numberInputClickDownHandler = this.numberInputClickDownHandler,
           numberInputChangeHandler = this.numberInputChangeHandler,
@@ -689,7 +693,14 @@ function (_React$Component) {
         className: "box"
       }, React.createElement("div", {
         className: "row"
-      }, Array.from(Array(totalMonths).keys()).map(function (m) {
+      }, loading && !error && React.createElement("h2", null, "Loading..."), !loading && error && React.createElement("div", null, React.createElement("h2", null, "Error loading holidays..."), React.createElement("a", {
+        href: "#",
+        onClick: function onClick(e) {
+          e.preventDefault();
+
+          _this2.loadHolidays();
+        }
+      }, "Retry")), !loading && !error && Array.from(Array(totalMonths).keys()).map(function (m) {
         var calendarStartDate = m > 0 ? addMonths(setDate(startDate, 1), m) : startDate;
         var lastDayOfMonthDay = parseInt(format(lastDayOfMonth(calendarStartDate), 'D'));
         var month = React.createElement(Month, {
